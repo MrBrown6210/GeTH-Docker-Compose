@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  geth:
+    image: mrbrown6210/geth:dev
+    ports:
+      - 3000:3000
+  server:
+    image: mrbrown6210/geth-api:dev
+    ports:
+      - 3030:3030
+    links:
+      - server-database:mongo
+    depends_on:
+      - server-database
+    environment:
+      - DATABASE_URL=server-database
+  server-database:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./db:/data/db
